@@ -12,7 +12,7 @@ import java.util.List;
 public class RSAUtils {
 
     // Generar claves RSA
-    public static KeyPair generateKeys(BigInteger p, BigInteger q) {
+    public static MyKeyPair generateKeys(BigInteger p, BigInteger q) {
         if (p.equals(q)) {throw new IllegalArgumentException("p y q no deben ser iguales");}
         if(!esPrimo(p)) {p =  primoMasCercano(p);}
         if(!esPrimo(q)) {q =  primoMasCercano(q);}
@@ -20,7 +20,7 @@ public class RSAUtils {
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
         BigInteger e = BigInteger.valueOf(65537); // Clave pública común
         BigInteger d = e.modInverse(phi); // Clave privada
-        return new KeyPair(new PublicKey(e, n), new PrivateKey(d, n));
+        return new MyKeyPair(new PublicKey(e, n), new PrivateKey(d, n));
     }
 
     // Cifrar mensaje
@@ -93,36 +93,53 @@ public class RSAUtils {
         }
     }
 
+    // Convierte una lista de BigInteger a una lista de Strings (para guardar en Firebase)
+    public static List<String> bigIntListToStringList(List<BigInteger> list) {
+        List<String> result = new ArrayList<>();
+        for (BigInteger b : list) {
+            result.add(b.toString());
+        }
+        return result;
+    }
+
+    // Convierte una lista de Strings a una lista de BigInteger (al leer de Firebase)
+    public static List<BigInteger> stringListToBigIntList(List<String> list) {
+        List<BigInteger> result = new ArrayList<>();
+        for (String s : list) {
+            result.add(new BigInteger(s));
+        }
+        return result;
+    }
+
+
+
 }
 
 // Clases para almacenar claves
-class PublicKey implements java.security.PublicKey {
+public class PublicKey implements java.security.PublicKey {
     private BigInteger e, n;
     // Getters y constructor
     public BigInteger getE() {return e;}
     public BigInteger getN() {return n;}
 
+    public PublicKey() {}
     public PublicKey(BigInteger e, BigInteger n) {
         this.e = e;
         this.n = n;
     }
 
-    @Override
-    public String getAlgorithm() {
-        return "";
-    }
+    // Métodos para Firebase (guardamos como String)
+    public String getEString() { return e.toString(); }
+    public String getNString() { return n.toString(); }
 
-    @Override
-    public String getFormat() {
-        return "";
-    }
+    public void setEString(String eStr) { this.e = new BigInteger(eStr); }
+    public void setNString(String nStr) { this.n = new BigInteger(nStr); }
 
-    @Override
-    public byte[] getEncoded() {
-        return new byte[0];
-    }
+    @Override public String getAlgorithm() { return "RSA"; }
+    @Override public String getFormat() { return "X.509"; }
+    @Override public byte[] getEncoded() { return new byte[0]; }
 }
-class PrivateKey implements java.security.PrivateKey {
+public class PrivateKey implements java.security.PrivateKey {
     private BigInteger d, n;
     // Getters y constructor
 
@@ -134,25 +151,22 @@ class PrivateKey implements java.security.PrivateKey {
         return d;
     }
 
-
+    public PrivateKey() {}
     public PrivateKey(BigInteger d, BigInteger n) {
         this.d = d;
         this.n = n;
 
     }
 
-    @Override
-    public String getAlgorithm() {
-        return "";
-    }
+    // Métodos para Firebase (guardamos como String)
+    public String getDString() { return d.toString(); }
+    public String getNString() { return n.toString(); }
 
-    @Override
-    public String getFormat() {
-        return "";
-    }
+    public void setDString(String eStr) { this.d = new BigInteger(eStr); }
+    public void setNString(String nStr) { this.n = new BigInteger(nStr); }
 
-    @Override
-    public byte[] getEncoded() {
-        return new byte[0];
-    }
+    @Override public String getAlgorithm() { return "RSA"; }
+    @Override public String getFormat() { return "X.509"; }
+    @Override public byte[] getEncoded() { return new byte[0]; }
 }
+
