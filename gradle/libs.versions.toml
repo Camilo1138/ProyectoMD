@@ -7,7 +7,9 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.10.0"
 constraintlayout = "2.2.0"
-
+firebaseBom="33.1.1"
+services="4.4.2"
+crashlytics="3.0.2"
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -17,6 +19,12 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+firebase-bom={module="com.google.firebase:firebase-bom", version.ref="firebaseBom"}
+firebase-crashlytics={module= "com.google.firebase:firebase-bom-crashlytics"}
+firebase-firestore={module="com.google.firebase:firebase-firestore"}
+firebase-auth={module="com.google.firebase:firebase-auth-ktx"}
 [plugins]
+googleServices={id="com.google.gms.google-services",version.ref="services"}
+crashlytics0 = {id="com.google.firebase.crashlytics", version.ref="crashlytics"}
 android-application = { id = "com.android.application", version.ref = "agp" }
 

@@ -5,6 +5,94 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".activities.LoginActivity">
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="305dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="204dp"
+        android:backgroundTint="#0e354b"
+        android:breakStrategy="balanced"
+        android:text="Registrarse"
+        android:textColor="@color/design_default_color_on_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="252dp"
+        android:backgroundTint="@color/design_default_color_on_primary"
+        android:hint="Nombre"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/design_default_color_on_primary"
+        android:hint="Email"
+        android:inputType="textPassword"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="316dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="380dp"
+        android:backgroundTint="@color/design_default_color_on_primary"
+        android:hint="Password"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etP"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/design_default_color_on_primary"
+        android:hint="ingrese un primo P"
+        android:inputType="number"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="444dp" />
+
+    <EditText
+        android:id="@+id/etQ"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/design_default_color_on_primary"
+        android:hint="ingrese un primo q"
+        android:inputType="number"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="502dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="179dp"
+        android:layout_height="202dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/rsa"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="16dp" />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
