@@ -25,6 +25,6 @@ firebase-firestore={module="com.google.firebase:firebase-firestore"}
 firebase-auth={module="com.google.firebase:firebase-auth-ktx"}
 [plugins]
 googleServices={id="com.google.gms.google-services",version.ref="services"}
-crashlytics0 = {id="com.google.firebase.crashlytics", version.ref="crashlytics"}
+crashlytics = {id="com.google.firebase.crashlytics", version.ref="crashlytics"}
 android-application = { id = "com.android.application", version.ref = "agp" }
 

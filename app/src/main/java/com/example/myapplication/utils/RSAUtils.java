@@ -1,27 +1,35 @@
 package com.example.myapplication.utils;
 import android.annotation.SuppressLint;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.crypto.Cipher;
+
 public class RSAUtils {
 
     // Generar claves RSA
-    public static MyKeyPair generateKeys(BigInteger p, BigInteger q) {
-        if (p.equals(q)) {throw new IllegalArgumentException("p y q no deben ser iguales");}
-        if(!esPrimo(p)) {p =  primoMasCercano(p);}
-        if(!esPrimo(q)) {q =  primoMasCercano(q);}
+    public static MyKeyPair generateKeyPair(BigInteger p, BigInteger q) throws IllegalArgumentException {
+        if (p.equals(q)) {
+            throw new IllegalArgumentException("p y q no deben ser iguales");
+        }
+        if(!esPrimo(p)) { p = primoMasCercano(p); }
+        if(!esPrimo(q)) { q = primoMasCercano(q); }
+
         BigInteger n = p.multiply(q);
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
-        BigInteger e = BigInteger.valueOf(65537); // Clave pública común
-        BigInteger d = e.modInverse(phi); // Clave privada
+        BigInteger e = BigInteger.valueOf(65537);
+        BigInteger d = e.modInverse(phi);
+
         return new MyKeyPair(new PublicKey(e, n), new PrivateKey(d, n));
     }
-
     // Cifrar mensaje
+    /*
     public static List<BigInteger> encryptLong(String message, PublicKey publicKey) {
         byte[] bytes = message.getBytes();
         int blockSize = (publicKey.getN().bitLength() - 1) / 8; // Tamaño seguro en bytes
@@ -37,9 +45,22 @@ public class RSAUtils {
 
         return encryptedBlocks;
     }
-
-
+*/
+    public static String encrypt(String plainText, PublicKey publicKey) throws Exception {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+        return Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
+    }
+    public static String decrypt(String encryptedText, PrivateKey privateKey) throws Exception {
+        byte[] encryptedBytes = Base64.decode(encryptedText, Base64.DEFAULT);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
+    }
     // Descifrar mensaje
+    /*
     public static String decryptLong(List<BigInteger> encryptedBlocks, PrivateKey privateKey) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -57,6 +78,8 @@ public class RSAUtils {
 
         return new String(baos.toByteArray());
     }
+
+     */
 
     @SuppressLint("NewApi")
     public static boolean esPrimo(BigInteger n) {

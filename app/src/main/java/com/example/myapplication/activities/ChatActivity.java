@@ -7,9 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +19,10 @@ import com.example.myapplication.adapters.MessagesAdapter;
 import com.example.myapplication.models.ChatMessage;
 import com.example.myapplication.models.Message;
 import com.example.myapplication.models.User;
+import com.example.myapplication.utils.PrivateKey;
 import com.example.myapplication.utils.PublicKey;
 import com.example.myapplication.utils.RSAUtils;
+import com.example.myapplication.utils.SecureStorage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -100,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
                             if (message.getSenderId().getId().equals(otherUserId)) {
                                 try {
                                     PrivateKey privateKey = SecureStorage.getPrivateKey();
-                                    String decrypted = RSAUtil.decrypt(message.getContent(), privateKey);
+                                    String decrypted = RSAUtils.decrypt(message.getContent(), privateKey);
                                     message.setContent(decrypted);
                                 } catch (Exception e) {
                                     message.setContent("[Mensaje cifrado no legible]");
@@ -120,11 +123,16 @@ public class ChatActivity extends AppCompatActivity {
         if (content.isEmpty()) return;
 
         try {
-            // Cifrar mensaje con clave pública del destinatario
-            PublicKey publicKey = RSAUtil.getPublicKeyFromString(otherUserPublicKey);
-            String encryptedContent = RSAUtil.encrypt(content, publicKey);
+            // Verificar que la clave pública es válida
+            if (otherUserPublicKey == null || otherUserPublicKey.isEmpty()) {
+                throw new IllegalArgumentException("La clave pública del destinatario no está disponible");
+            }
 
-            // Crear objeto mensaje
+            // Cifrar mensaje
+            PublicKey publicKey = PublicKey.fromString(otherUserPublicKey);
+            String encryptedContent = RSAUtils.encrypt(content, publicKey);
+
+            // Crear y guardar mensaje
             ChatMessage message = new ChatMessage();
             message.setChatId(db.collection("chats").document(chatId));
             message.setSenderId(db.collection("users").document(currentUserId));
@@ -132,19 +140,18 @@ public class ChatActivity extends AppCompatActivity {
             message.setTimestamp(new Date());
             message.setStatus("sent");
 
-            // Guardar en Firestore
             db.collection("messages").add(message)
                     .addOnSuccessListener(documentReference -> {
                         messageEditText.setText("");
                         updateChatLastMessage(encryptedContent);
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error al enviar mensaje", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error al enviar mensaje: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
 
         } catch (Exception e) {
-            Toast.makeText(this, "Error al cifrar mensaje", Toast.LENGTH_SHORT).show();
-            Log.e("Chat", "Error al cifrar", e);
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("Chat", "Error al enviar mensaje", e);
         }
     }
 

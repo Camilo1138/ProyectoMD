@@ -1,14 +1,34 @@
 package com.example.myapplication.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapters.UsersAdapter;
+import com.example.myapplication.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UsersListActivity extends AppCompatActivity implements UsersAdapter.OnUserClickListener {
 
@@ -88,10 +108,10 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
                 .where(Filter.or(
                         Filter.and(
                                 Filter.equalTo("user1", db.collection("users").document(currentUserId)),
-                                Filter.equalTo("user2", db.collection("users").document(otherUser.getUserId()))
+                                Filter.equalTo("user2", db.collection("users").document(otherUser.getId()))
                         ),
                         Filter.and(
-                                Filter.equalTo("user1", db.collection("users").document(otherUser.getUserId())),
+                                Filter.equalTo("user1", db.collection("users").document(otherUser.getId())),
                                 Filter.equalTo("user2", db.collection("users").document(currentUserId))
                         )
                 ))
@@ -112,7 +132,7 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
     private void createNewChat(User otherUser) {
         Map<String, Object> chat = new HashMap<>();
         chat.put("user1", db.collection("users").document(currentUserId));
-        chat.put("user2", db.collection("users").document(otherUser.getUserId()));
+        chat.put("user2", db.collection("users").document(otherUser.getId()));
         chat.put("lastMessage", "");
         chat.put("lastUpdate", FieldValue.serverTimestamp());
         chat.put("encrypted", true);
@@ -130,8 +150,8 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
     private void openChatActivity(String chatId, User otherUser) {
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("chatId", chatId);
-        intent.putExtra("otherUserId", otherUser.getUserId());
-        intent.putExtra("otherUserName", otherUser.getNombre());
+        intent.putExtra("otherUserId", otherUser.getId());
+        intent.putExtra("otherUserName", otherUser.getName());
         intent.putExtra("otherUserPublicKey", otherUser.getPublicKey());
         startActivity(intent);
         finish();

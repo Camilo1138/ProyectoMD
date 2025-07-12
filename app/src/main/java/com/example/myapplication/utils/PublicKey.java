@@ -22,6 +22,28 @@ public class PublicKey implements java.security.PublicKey {
         this.e = e;
         this.n = n;
     }
+    public static PublicKey fromString(String keyString) throws IllegalArgumentException {
+        if (keyString == null || keyString.isEmpty()) {
+            throw new IllegalArgumentException("El string de la clave pública no puede ser nulo o vacío");
+        }
+
+        String[] parts = keyString.split("\\|");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Formato de clave pública inválido. Se esperaba 'e|n'");
+        }
+
+        try {
+            BigInteger e = new BigInteger(parts[0]);
+            BigInteger n = new BigInteger(parts[1]);
+            return new PublicKey(e, n);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Los componentes de la clave pública deben ser números válidos", ex);
+        }
+    }
+    public String toStringRepresentation() {
+        return e.toString() + "|" + n.toString();
+    }
+
 
     // Métodos para Firebase (guardamos como String)
     public String getEString() {
