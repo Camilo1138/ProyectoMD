@@ -89,7 +89,7 @@
                 android:id="@+id/fabAgg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icono_persona"
+                android:src="@drawable/icono_perfil"
                 app:backgroundTint="@color/primaryColor"
                 app:tint="@android:color/white"
                 app:fabSize="mini" />
@@ -100,7 +100,7 @@
             android:id="@+id/fabMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/icono_mas"
             app:backgroundTint="@color/primaryColor"
             app:tint="@android:color/white" />
     </LinearLayout>
