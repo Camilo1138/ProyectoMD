@@ -20,8 +20,11 @@ public class User {
     // Constructor para registro
 
 
+    public User() {
+    }
+
     public User(String id, String name, String email, String bigInteger1,
-                   String bigInteger2, String publicKey, String privateKey) {
+                String bigInteger2, String publicKey, String privateKey) {
         this.id = id;
         this.name = name;
         this.email = email;

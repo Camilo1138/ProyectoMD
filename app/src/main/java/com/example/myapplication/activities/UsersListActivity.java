@@ -75,8 +75,8 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
     private void loadUsers() {
         progressBar.setVisibility(View.VISIBLE);
 
-        db.collection("users")
-                .whereNotEqualTo("userId", currentUserId) // Excluir al usuario actual
+        db.collection("usuarios")
+                .whereNotEqualTo("id", currentUserId) // Excluir al usuario actual
                 .get()
                 .addOnCompleteListener(task -> {
                     progressBar.setVisibility(View.GONE);

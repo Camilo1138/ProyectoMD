@@ -2,6 +2,7 @@ package com.example.myapplication.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -52,5 +56,32 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ChatListActivity.class));
             finish();
         }
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, 9000).show();
+            } else {
+                // El dispositivo no soporta Google Play Services
+            }
+        }
+        try {
+            ProviderInstaller.installIfNeededAsync(this, new ProviderInstaller.ProviderInstallListener() {
+                @Override
+                public void onProviderInstalled() {
+                    Log.d("Security", "Proveedor instalado");
+                }
+
+                @Override
+                public void onProviderInstallFailed(int errorCode, Intent recoveryIntent) {
+                    GoogleApiAvailability.getInstance().showErrorNotification(
+                            getApplicationContext(), errorCode);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("Security", "Error instalando proveedor", e);
+        }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = users.get(position);
-        holder.nameTextView.setText(user.getName());
-        holder.emailTextView.setText(user.getEmail()); // O cualquier campo que tengas
+        Log.d("Adapter", "Binding user: " + user.getName()); // Verifica datos
+        holder.nameTextView.setText(user.getName() != null ? user.getName() : "Sin nombre");
+        holder.emailTextView.setText(user.getEmail() != null ? user.getEmail() : "Sin email");
     }
 
     @Override
