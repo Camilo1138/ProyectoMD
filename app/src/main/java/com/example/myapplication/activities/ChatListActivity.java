@@ -47,7 +47,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
-
+        fabAgg=findViewById(R.id.fabAgg);
         fabMain = findViewById(R.id.fabMain);
         fabHackear = findViewById(R.id.fabHackear);
         fabHackearLayout = findViewById(R.id.fabHackearLayout);
@@ -166,20 +166,19 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Botón de retroceso/home
-                finish();
-                return true;
+        int id = item.getItemId();
 
-            case R.id.action_search:
-                // Acción para búsqueda
-                return true;
-
-            case R.id.action_logout:
-                // Acción para cerrar sesión
-                return true;
+        if (id == android.R.id.home) {
+            // Botón de retroceso/home
+            finish();
+            return true;
+        } else if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

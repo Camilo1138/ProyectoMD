@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:background="@drawable/bubble_received"
         android:padding="12dp"
-        android:maxWidth="80%">
+        android:maxWidth="280dp">
 
         <TextView
             android:id="@+id/messageText"

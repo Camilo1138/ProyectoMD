@@ -96,69 +96,65 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean userregister=false;
-    public void registrarUsuario(String nombre, String email,String password,
+    public void registrarUsuario(String nombre, String email, String password,
                                  BigInteger bigInteger1, BigInteger bigInteger2,
                                  String claveEncriptacion) {
 
-        // 1. Crear usuario en Firebase Authentication
         ProgressDialog progress = new ProgressDialog(this);
         progress.setMessage("Registrando usuario...");
         progress.setCancelable(false);
         progress.show();
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d("Registro", "Usuario autenticado en FirebaseAuth");
+
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         String userId = firebaseUser.getUid();
 
-                        // 2. Generar par de claves RSA
                         try {
-                            MyKeyPair mykeyPair = RSAUtils.generateKeys(bigInteger1,bigInteger2);
-
-                            // Convertir claves a formato almacenable
+                            MyKeyPair mykeyPair = RSAUtils.generateKeyPair(bigInteger1, bigInteger2);
                             String publicKeyStr = Base64.encodeToString(mykeyPair.getPublicKey().getEncoded(), Base64.DEFAULT);
-
                             String privateKeyStr = Base64.encodeToString(mykeyPair.getPrivateKey().getEncoded(), Base64.DEFAULT);
-
-                            // 3. Encriptar la clave privada con una clave derivada de la contraseña
                             String privateKeyEncrypted = AESUtil.encrypt(privateKeyStr, claveEncriptacion);
 
-                            // 4. Crear objeto Usuario
                             User usuario = new User(
-                                    userId,
-                                    nombre,
-                                    email,
-                                    bigInteger1.toString(),
-                                    bigInteger2.toString(),
-                                    publicKeyStr,
-                                    privateKeyEncrypted
+                                    userId, nombre, email,
+                                    bigInteger1.toString(), bigInteger2.toString(),
+                                    publicKeyStr, privateKeyEncrypted
                             );
 
-                            // 5. Guardar en Firestore
                             db.collection("usuarios").document(userId)
                                     .set(usuario)
                                     .addOnSuccessListener(aVoid -> {
-                                        Log.d("Registro", "Usuario registrado con éxito");
-                                        // Redirigir a la actividad principal
+                                        progress.dismiss();  // ✅ Cerrar al completar
+                                        Log.d("Registro", "Usuario guardado en Firestore");
                                         startActivity(new Intent(LoginActivity.this, ChatListActivity.class));
                                         finish();
                                     })
                                     .addOnFailureListener(e -> {
-                                        Log.e("Registro", "Error al guardar usuario", e);
-                                        // Eliminar usuario de Auth si falla
+                                        progress.dismiss();
+                                        Log.e("Registro", "Error al guardar en Firestore", e);
+                                        Toast.makeText(this, "Error guardando usuario", Toast.LENGTH_SHORT).show();
                                         firebaseUser.delete();
                                     });
 
                         } catch (Exception e) {
+                            progress.dismiss();
                             Log.e("Registro", "Error al generar claves RSA", e);
+                            Toast.makeText(this, "Error generando claves", Toast.LENGTH_SHORT).show();
                             firebaseUser.delete();
                         }
+
                     } else {
-                        Log.e("Registro", "Error al registrar usuario", task.getException());
+                        progress.dismiss();
+                        Log.e("Registro", "Error FirebaseAuth", task.getException());
+                        Toast.makeText(this, "Error creando usuario: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
+
 
 
 }

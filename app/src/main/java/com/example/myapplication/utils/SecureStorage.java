@@ -9,6 +9,8 @@ import android.util.Base64;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.myapplication.models.MyApplication;
+
 import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -80,7 +82,7 @@ public class SecureStorage {
 
                     byte[] decryptedKey = cipher.doFinal(Base64.decode(encryptedKey, Base64.DEFAULT));
                     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decryptedKey);
-                    return KeyFactory.getInstance("RSA").generatePrivate(keySpec);
+                    return (PrivateKey) KeyFactory.getInstance("RSA").generatePrivate(keySpec);
                 }
             }
 
@@ -94,4 +96,6 @@ public class SecureStorage {
     private static Context getAppContext() {
         return MyApplication.getInstance().getApplicationContext();
     }
+
+
 }

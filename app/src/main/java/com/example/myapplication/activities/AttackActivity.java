@@ -15,7 +15,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.utils.MyKeyPair;
 import com.example.myapplication.utils.RSAUtils;
 import java.math.BigInteger;
-
+/*
 public class AttackActivity extends AppCompatActivity {
     private EditText etTargetN;
     private Button btnHack;
@@ -55,3 +55,5 @@ public class AttackActivity extends AppCompatActivity {
         return null;
     }
 }
+
+ */

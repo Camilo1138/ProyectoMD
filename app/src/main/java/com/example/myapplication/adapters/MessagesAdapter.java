@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.models.ChatMessage;
 import com.example.myapplication.models.Message;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;

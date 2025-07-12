@@ -50,6 +50,8 @@
             android:layout_marginBottom="8dp">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Hackear_user"
                 android:textColor="@android:color/black"
                 android:background="@drawable/label_bg"
@@ -79,6 +81,8 @@
 
             <TextView
                 android:text="Agg_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:background="@drawable/label_bg"
                 android:padding="6dp"

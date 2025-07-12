@@ -1,5 +1,8 @@
 package com.example.myapplication.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Conversation {
     public String conversationId;
     public String participant1;

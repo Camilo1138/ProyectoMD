@@ -56,11 +56,14 @@ public class User {
 
     public boolean isHacked() { return isHacked; }
     public void setHacked(boolean hacked) { isHacked = hacked; }
-
+/*
     // Método para serializar claves (útil para Firebase)
     public String getPublicKeyAsString() {
         return publicKey.getE() + "," + publicKey.getN(); // Formato: "e,n"
     }
+
+
+ */
 
     // Método para deserializar claves (desde Firebase)
     public static PublicKey parsePublicKey(String keyString) {
