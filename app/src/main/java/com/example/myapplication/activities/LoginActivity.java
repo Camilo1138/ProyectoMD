@@ -2,6 +2,7 @@ package com.example.myapplication.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.example.myapplication.utils.SecureStorage;
 
 import com.example.myapplication.R;
 import com.example.myapplication.models.User;
@@ -115,10 +117,13 @@ public class LoginActivity extends AppCompatActivity {
 
                         try {
                             MyKeyPair mykeyPair = RSAUtils.generateKeyPair(bigInteger1, bigInteger2);
-                            String publicKeyStr = Base64.encodeToString(mykeyPair.getPublicKey().getEncoded(), Base64.DEFAULT);
-                            String privateKeyStr = Base64.encodeToString(mykeyPair.getPrivateKey().getEncoded(), Base64.DEFAULT);
+                            //String publicKeyStr = Base64.encodeToString(mykeyPair.getPublicKey().getEncoded(), Base64.DEFAULT);
+                            String publicKeyStr = mykeyPair.getPublicKey().toStringRepresentation();
+                            String privateKeyStr = mykeyPair.getPrivateKey().getD().toString() + "|" + mykeyPair.getPrivateKey().getN().toString();
                             String privateKeyEncrypted = AESUtil.encrypt(privateKeyStr, claveEncriptacion);
-
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                SecureStorage.savePrivateKey(mykeyPair.getPrivateKey());
+                            }
                             User usuario = new User(
                                     userId, nombre, email,
                                     bigInteger1.toString(), bigInteger2.toString(),
@@ -154,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
 

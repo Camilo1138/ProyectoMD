@@ -1,17 +1,25 @@
 package com.example.myapplication.adapters;
 
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.activities.ChatActivity;
 import com.example.myapplication.models.Chat;
+import com.example.myapplication.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import java.util.List;
 
@@ -19,15 +27,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     private List<Chat> chatList;
     private OnChatClickListener listener;
+    private String currentUserId;
+
 
     public interface OnChatClickListener {
         void onChatClick(int position);
     }
 
-    public ChatAdapter(List<Chat> chatList, OnChatClickListener listener) {
+    public ChatAdapter(List<Chat> chatList, String currentUserId, OnChatClickListener listener) {
+        this.chatList = chatList;
+        this.currentUserId = currentUserId;
+        this.listener = listener;
+    }
+   /* public ChatAdapter(List<Chat> chatList,  OnChatClickListener listener) {
         this.chatList = chatList;
         this.listener = listener;
     }
+
+    */
+
 
     @NonNull
     @Override
@@ -41,6 +59,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = chatList.get(position);
         holder.bind(chat);
+
+        DocumentReference otherUserRef = chat.getUser1().getId().equals(currentUserId)
+                ? chat.getUser2() : chat.getUser1();
+
+         FirebaseFirestore db = FirebaseFirestore.getInstance();
+         otherUserRef = db.collection("usuarios").document(otherUserRef.getId());
+
+        // Obtener y mostrar el nombre del otro usuario
+        otherUserRef.get().addOnSuccessListener(documentSnapshot -> {
+            User user = documentSnapshot.toObject(User.class);
+            if (user != null) {
+                holder.chatName.setText(user.getName());
+            } else {
+                holder.chatName.setText("Usuario desconocido");
+            }
+        });
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -72,15 +106,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         public void bind(Chat chat) {
-            // Aquí deberías cargar el nombre del otro participante y su avatar
-            chatName.setText("Chat"); // Temporal, necesitarías cargar el nombre real
+            // El nombre lo seteamos aparte al cargar el User
 
-            lastMessage.setText(chat.getLastMessage());
+            if (chat.getLastMessage() != null) {
+                lastMessage.setText(chat.getLastMessage());
+            } else {
+                lastMessage.setText("Sin mensajes");
+            }
 
             if (chat.getLastUpdate() != null) {
                 time.setText(DateUtils.formatDateTime(itemView.getContext(),
                         chat.getLastUpdate().getTime(),
                         DateUtils.FORMAT_SHOW_TIME));
+            } else {
+                time.setText("");
             }
         }
     }

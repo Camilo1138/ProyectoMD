@@ -11,7 +11,21 @@ public class ChatMessage {
     private String content;
     private Date timestamp;
     private String status;
+    private String encryptedKey;
+    private String iv;
+    public String getIv() {
+        return iv;
+    }
+    public void setIv(String iv) {
+        this.iv = iv;
+    }
+    public String getEncryptedKey() {
+        return encryptedKey;
+    }
 
+    public void setEncryptedKey(String encryptedKey) {
+        this.encryptedKey = encryptedKey;
+    }
     // Constructor vacío para Firestore
     public ChatMessage() {}
 

@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
         // Configurar RecyclerView
         chatsRecyclerView = findViewById(R.id.chatsRecyclerView);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatAdapter = new ChatAdapter(chatList, this);
+        chatAdapter = new ChatAdapter(chatList,currentUserId ,this);
         chatsRecyclerView.setAdapter(chatAdapter);
 
         // Botón para nuevo chat
@@ -104,12 +105,13 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
     }
 
     private void loadChats() {
-        db.collection("chats")
+      /*  db.collection("chats")
                 .where(Filter.or(
-                        Filter.equalTo("user1", db.collection("users").document(currentUserId)),
-                        Filter.equalTo("user2", db.collection("users").document(currentUserId))
+                        Filter.equalTo("user1", db.collection("usuarios").document(currentUserId)),
+                        Filter.equalTo("user2", db.collection("usuarios").document(currentUserId))
                 ))
                 .orderBy("lastUpdate", Query.Direction.DESCENDING)
+
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         Toast.makeText(this, "Error al cargar chats", Toast.LENGTH_SHORT).show();
@@ -126,6 +128,30 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                     }
                     chatAdapter.notifyDataSetChanged();
                 });
+
+       */
+        db.collection("chats")
+                .where(Filter.or(
+                        Filter.equalTo("user1", db.collection("users").document(currentUserId)),
+                        Filter.equalTo("user2", db.collection("users").document(currentUserId))
+                ))
+                .orderBy("lastUpdate", Query.Direction.DESCENDING)
+                .get(Source.SERVER)  // <- SOLO servidor
+                .addOnSuccessListener(querySnapshot -> {
+                    chatList.clear();
+                    for (DocumentSnapshot doc : querySnapshot) {
+                        Chat chat = doc.toObject(Chat.class);
+                        if (chat != null) {
+                            chat.setChatId(doc.getId());
+                            chatList.add(chat);
+                        }
+                    }
+                    chatAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al cargar chats del servidor", Toast.LENGTH_SHORT).show();
+                });
+
     }
 
     @Override
@@ -135,7 +161,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                 chat.getUser2().getId() : chat.getUser1().getId();
 
         // Obtener detalles del otro usuario
-        db.collection("users").document(otherUserId).get()
+        db.collection("usuarios").document(otherUserId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     User otherUser = documentSnapshot.toObject(User.class);
                     if (otherUser != null) {

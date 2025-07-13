@@ -1,6 +1,7 @@
 package com.example.myapplication.utils;
 
 import java.math.BigInteger;
+import java.security.KeyFactory;
 
 public class PrivateKey implements java.security.PrivateKey {
     private BigInteger d, n;
@@ -47,11 +48,24 @@ public class PrivateKey implements java.security.PrivateKey {
 
     @Override
     public String getFormat() {
-        return "X.509";
+        return "PKCS#8";
     }
 
-    @Override
+    /*@Override
     public byte[] getEncoded() {
         return new byte[0];
     }
+
+     */
+    @Override
+    public byte[] getEncoded() {
+        try {
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            java.security.spec.RSAPrivateKeySpec spec = new java.security.spec.RSAPrivateKeySpec(n, d);
+            return factory.generatePrivate(spec).getEncoded();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
 }

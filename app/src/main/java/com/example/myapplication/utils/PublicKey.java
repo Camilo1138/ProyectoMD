@@ -1,6 +1,7 @@
 package com.example.myapplication.utils;
 
 import java.math.BigInteger;
+import java.security.KeyFactory;
 
 // Clases para almacenar claves
 public class PublicKey implements java.security.PublicKey {
@@ -72,8 +73,19 @@ public class PublicKey implements java.security.PublicKey {
         return "X.509";
     }
 
+   // @Override
+    //public byte[] getEncoded() {
+     //   return new byte[0];
+    //}
     @Override
     public byte[] getEncoded() {
-        return new byte[0];
+        try {
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            java.security.spec.RSAPublicKeySpec spec = new java.security.spec.RSAPublicKeySpec(n, e);
+            return factory.generatePublic(spec).getEncoded();
+        } catch (Exception ex) {
+            return null;
+        }
     }
+
 }

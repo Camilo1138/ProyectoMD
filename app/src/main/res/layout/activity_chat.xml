@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primaryColor"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_arrow_back"/>
+        app:titleTextColor="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messagesRecyclerView"
@@ -34,10 +33,11 @@
 
         <EditText
             android:id="@+id/messageEditText"
-            android:layout_width="0dp"
+            android:layout_width="2dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Escribe un mensaje"
+            android:textColor="@android:color/black"
             android:inputType="textMultiLine"
             android:maxLines="3"
             android:background="@drawable/edittext_background"/>
@@ -48,7 +48,10 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_send"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Enviar mensaje"/>
+            android:contentDescription="Enviar mensaje"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            />
 
     </LinearLayout>
 

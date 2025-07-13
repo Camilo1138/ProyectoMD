@@ -14,6 +14,7 @@ public class ChatManager {
     private FirebaseFirestore db;
     private String currentUserId;
 
+
     private ChatManager() {
         db = FirebaseFirestore.getInstance();
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
