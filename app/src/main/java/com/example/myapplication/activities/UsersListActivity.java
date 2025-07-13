@@ -107,12 +107,12 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
         db.collection("chats")
                 .where(Filter.or(
                         Filter.and(
-                                Filter.equalTo("user1", db.collection("users").document(currentUserId)),
-                                Filter.equalTo("user2", db.collection("users").document(otherUser.getId()))
+                                Filter.equalTo("user1", db.collection("usuarios").document(currentUserId)),
+                                Filter.equalTo("user2", db.collection("usuarios").document(otherUser.getId()))
                         ),
                         Filter.and(
-                                Filter.equalTo("user1", db.collection("users").document(otherUser.getId())),
-                                Filter.equalTo("user2", db.collection("users").document(currentUserId))
+                                Filter.equalTo("user1", db.collection("usuarios").document(otherUser.getId())),
+                                Filter.equalTo("user2", db.collection("usuarios").document(currentUserId))
                         )
                 ))
                 .limit(1)
@@ -131,8 +131,8 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
 
     private void createNewChat(User otherUser) {
         Map<String, Object> chat = new HashMap<>();
-        chat.put("user1", db.collection("users").document(currentUserId));
-        chat.put("user2", db.collection("users").document(otherUser.getId()));
+        chat.put("user1", db.collection("usuarios").document(currentUserId));
+        chat.put("user2", db.collection("usuarios").document(otherUser.getId()));
         chat.put("lastMessage", "");
         chat.put("lastUpdate", FieldValue.serverTimestamp());
         chat.put("encrypted", true);

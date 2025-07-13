@@ -3,9 +3,11 @@ package com.example.myapplication.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
@@ -24,6 +26,7 @@ import com.example.myapplication.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,7 +59,12 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
 
         fabMain.setOnClickListener(v -> {
             if (fabHackearLayout.getVisibility() == View.GONE) {
-                fabMain.animate().rotation(45f).setDuration(200).start();
+                fabMain.animate()
+                        .rotation(45f)
+                        .setDuration(200)
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .start();
+
                 fabHackearLayout.setVisibility(View.VISIBLE);
                 fabAggLayout.setVisibility(View.VISIBLE);
             } else {
@@ -105,7 +113,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
     }
 
     private void loadChats() {
-      /*  db.collection("chats")
+       db.collection("chats")
                 .where(Filter.or(
                         Filter.equalTo("user1", db.collection("usuarios").document(currentUserId)),
                         Filter.equalTo("user2", db.collection("usuarios").document(currentUserId))
@@ -114,6 +122,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
 
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
+                        Log.e("FIRESTORE", "Error al cargar chats", error);
                         Toast.makeText(this, "Error al cargar chats", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -129,11 +138,13 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                     chatAdapter.notifyDataSetChanged();
                 });
 
-       */
+
+        /*
+        DocumentReference currentUserRef = db.collection("usuarios").document(currentUserId);
         db.collection("chats")
                 .where(Filter.or(
-                        Filter.equalTo("user1", db.collection("users").document(currentUserId)),
-                        Filter.equalTo("user2", db.collection("users").document(currentUserId))
+                        Filter.equalTo("user1", currentUserRef),
+                        Filter.equalTo("user2", currentUserRef)
                 ))
                 .orderBy("lastUpdate", Query.Direction.DESCENDING)
                 .get(Source.SERVER)  // <- SOLO servidor
@@ -151,6 +162,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al cargar chats del servidor", Toast.LENGTH_SHORT).show();
                 });
+        */
 
     }
 
@@ -168,6 +180,11 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                         openChatActivity(chat.getChatId(), otherUser);
                     }
                 });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChats(); // 🔄 Se actualiza la lista al volver a la ventana
     }
 
     private void openChatActivity(String chatId, User otherUser) {

@@ -66,7 +66,13 @@
                 android:src="@drawable/hacker_icon"
                 app:backgroundTint="@color/primaryColor"
                 app:tint="@android:color/white"
-                app:fabSize="mini" />
+                app:borderWidth="0dp"
+                app:elevation="8dp"
+                app:fabCustomSize="56dp"
+                app:fabSize="normal"
+                app:maxImageSize="24dp"
+                app:rippleColor="@color/primaryDarkColor"
+                />
         </LinearLayout>
 
         <!-- Opción: Agg_user -->
@@ -96,16 +102,29 @@
                 android:src="@drawable/icono_perfil"
                 app:backgroundTint="@color/primaryColor"
                 app:tint="@android:color/white"
-                app:fabSize="mini" />
+                app:borderWidth="0dp"
+                app:elevation="8dp"
+                app:fabCustomSize="56dp"
+                app:fabSize="normal"
+                app:maxImageSize="24dp"
+                app:rippleColor="@color/primaryDarkColor"
+                />
         </LinearLayout>
 
         <!-- FAB principal -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="127dp"
+            android:layout_height="match_parent"
             android:src="@drawable/icono_mas"
             app:backgroundTint="@color/primaryColor"
-            app:tint="@android:color/white" />
+            app:tint="@android:color/white"
+            app:borderWidth="0dp"
+            app:elevation="8dp"
+            app:fabCustomSize="56dp"
+            app:fabSize="normal"
+            app:maxImageSize="24dp"
+            app:rippleColor="@color/primaryDarkColor"
+            />
     </LinearLayout>
 </FrameLayout>

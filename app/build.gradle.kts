@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
     implementation ("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.gms:play-services-base:18.4.0")
     implementation("com.google.android.gms:play-services-basement:18.4.0")
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
