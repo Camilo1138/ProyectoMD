@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInActivity extends AppCompatActivity {
 
     private EditText etEmailLogin, etPasswordLogin;
-    private Button btnLogin;
+    private Button btnSignUp;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,11 +37,11 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        etEmailLogin = findViewById(R.id.etEmail);
+        etEmailLogin = findViewById(R.id.etEmail2);
         etPasswordLogin = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnSignUp);
+        btnSignUp = findViewById(R.id.btnSignUp);
 
-        btnLogin.setOnClickListener(v -> {
+        btnSignUp.setOnClickListener(v -> {
             String email = etEmailLogin.getText().toString().trim();
             String password = etPasswordLogin.getText().toString().trim();
 
