@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtil {
 
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
-    private static final int GCM_TAG_LENGTH = 128;
+    static final int GCM_TAG_LENGTH = 128;
 
     public static String encrypt(String plaintext, String password) throws Exception {
         byte[] salt = new byte[16];

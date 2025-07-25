@@ -1,5 +1,7 @@
 package com.example.myapplication.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.myapplication.utils.PrivateKey;
 import com.example.myapplication.utils.SecureStorage;
 
 import com.example.myapplication.R;
@@ -22,6 +26,7 @@ import com.example.myapplication.models.User;
 import com.example.myapplication.utils.AESUtil;
 import com.example.myapplication.utils.MyKeyPair;
 import com.example.myapplication.utils.RSAUtils;
+import com.example.myapplication.utils.SecureStorageException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,6 +61,12 @@ public class LoginActivity extends AppCompatActivity {
             BigInteger p = new BigInteger(etP.getText().toString());
             BigInteger q = new BigInteger(etQ.getText().toString());
 
+            // Al inicio de la validación, antes de procesar los números
+            if (etP.getText().toString().length() < 150 || etQ.getText().toString().length() < 150) {
+                etP.setError("Debe tener al menos 150 dígitos");
+                etQ.setError("Debe tener al menos 150 dígitos");
+                return;
+            }
             if (!RSAUtils.esPrimo(p)) {
                 Toast.makeText(this, "p no es primo, se cambiará por el primo más cercano", Toast.LENGTH_SHORT).show();
                 p = RSAUtils.primoMasCercano(p);
@@ -72,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 // Convertir a String
-            bigInt1Str = p.toString();
-            bigInt2Str = q.toString();
+
 
             if (name.isEmpty() || email.isEmpty() ||
                     bigInt1Str.isEmpty() || bigInt2Str.isEmpty()) {
@@ -91,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
 
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Los valores numéricos no son válidos", Toast.LENGTH_SHORT).show();
+            } catch (SecureStorageException e) {
+                throw new RuntimeException(e);
             }
         });
 
@@ -100,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     boolean userregister=false;
     public void registrarUsuario(String nombre, String email, String password,
                                  BigInteger bigInteger1, BigInteger bigInteger2,
-                                 String claveEncriptacion) {
+                                 String claveEncriptacion) throws SecureStorageException {
 
         ProgressDialog progress = new ProgressDialog(this);
         progress.setMessage("Registrando usuario...");
@@ -122,8 +134,26 @@ public class LoginActivity extends AppCompatActivity {
                             String privateKeyStr = mykeyPair.getPrivateKey().getD().toString() + "|" + mykeyPair.getPrivateKey().getN().toString();
                             String privateKeyEncrypted = AESUtil.encrypt(privateKeyStr, claveEncriptacion);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                SecureStorage.savePrivateKey(mykeyPair.getPrivateKey());
+                                try {
+                                    SecureStorage.savePrivateKey(mykeyPair.getPrivateKey(), this);
+                                    PrivateKey storedKey = SecureStorage.getPrivateKey(this);
+                                    if (storedKey == null ||
+                                            !storedKey.getD().toString().equals(mykeyPair.getPrivateKey().getD().toString()) ||
+                                            !storedKey.getN().toString().equals(mykeyPair.getPrivateKey().getN().toString())) {
+                                        Log.e("Validación", "D esperado: " + mykeyPair.getPrivateKey().getD());
+                                        Log.e("Validación", "D obtenido: " + storedKey.getD());
+                                        Log.e("Validación", "N esperado: " + mykeyPair.getPrivateKey().getN());
+                                        Log.e("Validación", "N obtenido: " + storedKey.getN());
+                                        throw new SecureStorageException("Validación de clave fallida");
+                                    }
+
+                                } catch (SecureStorageException e) {
+                                    handleRegistrationError(progress, firebaseUser,
+                                            "Error crítico de seguridad. Registro abortado.");
+                                    return;
+                                }
                             }
+
                             User usuario = new User(
                                     userId, nombre, email,
                                     bigInteger1.toString(), bigInteger2.toString(),
@@ -158,8 +188,19 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(this, "Error creando usuario: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-    }
 
+
+    }
+    // Crear un método helper para manejo consistente de errores
+    private void handleRegistrationError(ProgressDialog progress, FirebaseUser user, String message) {
+        if (progress != null && progress.isShowing()) {
+            progress.dismiss();
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        if (user != null) {
+            user.delete();
+        }
+    }
 
 
 

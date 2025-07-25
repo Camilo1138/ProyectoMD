@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 
         // Constantes de configuración
         private static final String AES_ALGORITHM = "AES";
-        private static final String AES_MODE = "AES/GCM/NoPadding";
+        static final String AES_MODE = "AES/GCM/NoPadding";
         private static final int AES_KEY_SIZE = 128; // bits
         private static final int IV_SIZE = 12; // 96 bits (recomendado para GCM)
         private static final int TAG_LENGTH_BIT = 128; // Tamaño del tag de autenticación

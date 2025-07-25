@@ -11,7 +11,7 @@ public class User {
     private String name;                // Nombre del usuario
     private String email;               // Email (opcional, para registro)
     private String publicKey;        // Clave pública (e, n)
-    private String privateKey;      // Clave privada (d, n)
+    private String privateKeyEncrypted;      // Clave privada (d, n)
     private boolean isHacked = false;
     private String bigInteger1;
     private String bigInteger2;// ¿Fue hackeado? (para el modo ataque)
@@ -24,14 +24,14 @@ public class User {
     }
 
     public User(String id, String name, String email, String bigInteger1,
-                String bigInteger2, String publicKey, String privateKey) {
+                String bigInteger2, String publicKey, String privateKeyEncrypted) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.bigInteger1 = bigInteger1;
         this.bigInteger2 = bigInteger2;
         this.publicKey = publicKey;
-        this.privateKey = privateKey;
+        this.privateKeyEncrypted = privateKeyEncrypted;
     }
 
     /*public User(String name, String email, PublicKey publicKey, PrivateKey privateKey) {
@@ -54,8 +54,8 @@ public class User {
     public String getPublicKey() { return publicKey; }
     public void setPublicKey(String publicKey) { this.publicKey = publicKey; }
 
-    public String getPrivateKey() { return privateKey; }
-    public void setPrivateKey(String privateKey) { this.privateKey = privateKey; }
+    public String getPrivateKeyEncrypted() { return privateKeyEncrypted; }
+    public void setPrivateKeyEncrypted(String privateKey) { this.privateKeyEncrypted = privateKey; }
 
     public boolean isHacked() { return isHacked; }
     public void setHacked(boolean hacked) { isHacked = hacked; }
