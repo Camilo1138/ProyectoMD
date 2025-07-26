@@ -9,6 +9,8 @@
     <color name="primaryColor">#6200EE</color>
     <color name="primaryDarkColor">#3700B3</color>
     <color name="accentColor">#03DAC5</color>
+    <color name="mi_color_status_bar">#0e354b</color>
+    <color name="mi_color_status_bar_dark">#0e354b</color>
 
     <color name="background">#FAFAFA</color>
     <color name="chatBackground">#E5E5E5</color>

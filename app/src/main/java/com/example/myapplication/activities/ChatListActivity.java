@@ -53,30 +53,34 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
         setContentView(R.layout.activity_chat_list);
         fabAgg=findViewById(R.id.fabAgg);
         fabMain = findViewById(R.id.fabMain);
-        fabHackear = findViewById(R.id.fabHackear);
-        fabHackearLayout = findViewById(R.id.fabHackearLayout);
+        //fabHackear = findViewById(R.id.fabHackear);
+        //fabHackearLayout = findViewById(R.id.fabHackearLayout);
         fabAggLayout = findViewById(R.id.fabAggLayout);
 
         fabMain.setOnClickListener(v -> {
-            if (fabHackearLayout.getVisibility() == View.GONE) {
+            if (fabAggLayout.getVisibility() == View.GONE) {
                 fabMain.animate()
-                        .rotation(45f)
+                        .rotation(0f)
                         .setDuration(200)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .start();
 
-                fabHackearLayout.setVisibility(View.VISIBLE);
+
+
+                //fabHackearLayout.setVisibility(View.VISIBLE);
                 fabAggLayout.setVisibility(View.VISIBLE);
             } else {
                 fabMain.animate().rotation(0f).setDuration(200).start();
-                fabHackearLayout.setVisibility(View.GONE);
+                //fabHackearLayout.setVisibility(View.GONE);
                 fabAggLayout.setVisibility(View.GONE);
             }
         });
 
-        fabHackear.setOnClickListener(v ->
+        /*fabHackear.setOnClickListener(v ->
                 Toast.makeText(this, "Hackear_user presionado", Toast.LENGTH_SHORT).show()
         );
+
+         */
 
         fabAgg.setOnClickListener(v ->
                 startActivity(new Intent(this, UsersListActivity.class))
@@ -139,30 +143,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
                 });
 
 
-        /*
-        DocumentReference currentUserRef = db.collection("usuarios").document(currentUserId);
-        db.collection("chats")
-                .where(Filter.or(
-                        Filter.equalTo("user1", currentUserRef),
-                        Filter.equalTo("user2", currentUserRef)
-                ))
-                .orderBy("lastUpdate", Query.Direction.DESCENDING)
-                .get(Source.SERVER)  // <- SOLO servidor
-                .addOnSuccessListener(querySnapshot -> {
-                    chatList.clear();
-                    for (DocumentSnapshot doc : querySnapshot) {
-                        Chat chat = doc.toObject(Chat.class);
-                        if (chat != null) {
-                            chat.setChatId(doc.getId());
-                            chatList.add(chat);
-                        }
-                    }
-                    chatAdapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al cargar chats del servidor", Toast.LENGTH_SHORT).show();
-                });
-        */
+
 
     }
 
@@ -201,8 +182,8 @@ public class ChatListActivity extends AppCompatActivity implements ChatAdapter.O
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         // Opcional: Modificar ítems del menú dinámicamente
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        searchItem.setVisible(true); // Podrías ocultarlo en ciertas condiciones
+        //MenuItem searchItem = menu.findItem(R.id.action_search);
+        //searchItem.setVisible(true); // Podrías ocultarlo en ciertas condiciones
 
         return true; // Mostrar el menú
     }

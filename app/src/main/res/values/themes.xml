@@ -1,11 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
-    <!-- res/values/themes.xml -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+    <style name="Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Cambia el color de la barra de estado (status bar) -->
+        <item name="android:statusBarColor">@color/mi_color_status_bar</item>
 
-    <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
+        <!-- Opcional: fuerza íconos oscuros en status bar si es fondo claro -->
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+    </style>
 </resources>

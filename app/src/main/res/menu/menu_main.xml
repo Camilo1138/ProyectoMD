@@ -2,16 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/icono_lupa"
-        android:title="Buscar"
-        app:showAsAction="ifRoom|withText"/>
 
-    <item
-        android:id="@+id/action_new_group"
-        android:title="Nuevo grupo"
-        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_logout"

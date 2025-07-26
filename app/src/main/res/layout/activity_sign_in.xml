@@ -26,8 +26,10 @@
         android:id="@+id/etEmail2"
         android:layout_width="326dp"
         android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:backgroundTint="@color/design_default_color_on_primary"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/gradient_editext"
+        android:textColor="@color/design_default_color_on_primary"
+        android:textColorHint="#99FFFFFF"
         android:hint="Email"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,9 +43,11 @@
         android:layout_width="326dp"
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/design_default_color_on_primary"
+        android:background="@drawable/gradient_editext"
+        android:textColorHint="#99FFFFFF"
         android:hint="Password"
         android:inputType="text"
+        android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,12 +56,12 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="179dp"
-        android:layout_height="202dp"
+        android:layout_width="359dp"
+        android:layout_height="345dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/rsa"
+        app:srcCompat="@drawable/logo3"
         tools:ignore="MissingConstraints" />
 
 
